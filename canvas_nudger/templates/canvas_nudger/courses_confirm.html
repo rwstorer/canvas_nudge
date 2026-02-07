@@ -1,30 +1,96 @@
 {% load dict_extras %}
 
+<style>
+    .course-list {
+        margin: 1.2em 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .course-item {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin-bottom: 10px;
+        transition: background 0.15s ease, border-color 0.15s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .course-item:hover {
+        background: #f3f4f6;
+        border-color: #d1d5db;
+    }
+
+    .course-label {
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .course-dates {
+        color: #6b7280;
+        font-size: 0.85em;
+        margin-left: auto;
+        white-space: nowrap;
+    }
+
+    .btn {
+        background: #2563eb;
+        color: white;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9em;
+        margin-right: 6px;
+    }
+
+    .btn:hover {
+        background: #1d4ed8;
+    }
+
+    .btn-secondary {
+        background: #6b7280;
+    }
+
+    .btn-secondary:hover {
+        background: #4b5563;
+    }
+
+    .submit-btn {
+        margin-top: 1em;
+        padding: 10px 18px;
+        font-size: 1em;
+    }
+</style>
+
 <form method="post">
     {% csrf_token %}
 
     <p>
-        <button type="button" onclick="toggleCourses(true)">Check All</button>
-        <button type="button" onclick="toggleCourses(false)">Uncheck All</button>
+        <button type="button" class="btn" onclick="toggleCourses(true)">Check All</button>
+        <button type="button" class="btn btn-secondary" onclick="toggleCourses(false)">Uncheck All</button>
     </p>
 
-    <div>
+    <ul class="course-list">
         {% for value, label in form.fields.courses.choices %}
             {% with course=form.courses_data|dict_get:value %}
-                <label style="display:block; margin-bottom:6px;">
+                <li class="course-item">
                     <input type="checkbox" name="courses" value="{{ value }}">
-                    <strong>{{ label }}</strong>
-                    <span style="color:#555; font-size:0.85em; margin-left: 6px;">
-                        <em>Start:</em> {{ course.start_at|pretty_date }}
+                    <span class="course-label">{{ label }}</span>
+                    <span class="course-dates">
+                        <span style="color: green">📅</span> Start: {{ course.start_at|pretty_date }}
                         &nbsp;•&nbsp;
-                        <em>End:</em> {{ course.end_at|pretty_date }}
+                        <span style="color: red">📅</span> End: {{ course.end_at|pretty_date }}
                     </span>
-                </label>
+                </li>
             {% endwith %}
         {% endfor %}
-    </div>
+    </ul>
 
-    <button type="submit">Continue</button>
+    <button type="submit" class="btn submit-btn">Continue</button>
 </form>
 
 <script>
