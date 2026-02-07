@@ -47,13 +47,17 @@ Prerequisites: Python 3.10+ (a virtualenv is recommended).
 - Use the UI (Message Templates page) to preview and save templates; the app persists them to the same defaults file.
 
 ## **Development & Testing**
+
 - Run unit tests (if any): `python manage.py test`.
 - The project uses a local SQLite DB by default (`db.sqlite3`).
 
 ## **Notes & Security**
 
-- The `api_token` is a Canvas API token—keep it secret. Storing it in `canvas_nudger/.env/defaults.json` is convenient for local testing but not suitable for production.
+- The `api_token` is a Canvas API token. Keep it secret. Storing it in `canvas_nudger/.env/defaults.json` is convenient for local testing, but not suitable for production.
 - This project is intended as a lightweight instructor tool and assumes the API token has sufficient Canvas permissions to read courses/users/assignments and send conversations.
+- This project is intentionally less secure to keep the barriers to entry low
+- So long as you run it within a Python virtual environment using the built-in Django development server on your localhost and **DO NOT** host it on an internal or external web server, all should be fine.
+- If you want to run this on a web server where others can access it, as a minimum, please revisit the security of the Canvas API key and the Django secret key.
 
 ## Tree
 
