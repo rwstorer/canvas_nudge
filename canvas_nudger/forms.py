@@ -1,3 +1,4 @@
+from typing import Iterable, Tuple
 from django import forms
 
 class StartForm(forms.Form):
@@ -26,10 +27,11 @@ class ConfirmCoursesForm(forms.Form):
         label="Select courses to include"
     )
 
-    def __init__(self, *args, **kwargs):
-        course_choices = kwargs.pop("course_choices", [])
+    def __init__(self, *args, course_choices=None, courses_data=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["courses"].choices = course_choices
+        typed_choices: Iterable[Tuple[str, str]] = course_choices or []
+        self.fields["courses"].choices = typed_choices
+        self.courses_data = courses_data or {}
 
 class MessageTemplateForm(forms.Form):
     template_congrats = forms.CharField(

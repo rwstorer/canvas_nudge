@@ -1,9 +1,35 @@
-<h1>Confirm Courses</h1>
-
-<p>These are the courses retrieved from Canvas. Select the ones you want to include.</p>
+{% load dict_extras %}
 
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+
+    <p>
+        <button type="button" onclick="toggleCourses(true)">Check All</button>
+        <button type="button" onclick="toggleCourses(false)">Uncheck All</button>
+    </p>
+
+    <div>
+        {% for value, label in form.fields.courses.choices %}
+            {% with course=form.courses_data|dict_get:value %}
+                <label style="display:block; margin-bottom:6px;">
+                    <input type="checkbox" name="courses" value="{{ value }}">
+                    <strong>{{ label }}</strong>
+                    <span style="color:#555; font-size:0.85em; margin-left: 6px;">
+                        <em>Start:</em> {{ course.start_at|pretty_date }}
+                        &nbsp;•&nbsp;
+                        <em>End:</em> {{ course.end_at|pretty_date }}
+                    </span>
+                </label>
+            {% endwith %}
+        {% endfor %}
+    </div>
+
     <button type="submit">Continue</button>
 </form>
+
+<script>
+function toggleCourses(state) {
+    const boxes = document.querySelectorAll('input[type=checkbox][name="courses"]');
+    boxes.forEach(cb => cb.checked = state);
+}
+</script>

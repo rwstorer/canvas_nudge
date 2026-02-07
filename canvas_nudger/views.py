@@ -51,18 +51,26 @@ class ConfirmCoursesView(FormView):
     template_name = "canvas_nudger/courses_confirm.html"
     form_class = ConfirmCoursesForm
     success_url = reverse_lazy("weekly_report") 
+    
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         token = self.request.session.get("api_token")
         course_ids = self.request.session.get("course_ids", [])
         base_url = self.request.session.get("canvas_api_url")
-        # Fetch course metadata from Canvas
+
+        # Fetch course metadata
         courses = canvas_client.get_courses_by_ids(base_url, token, course_ids)
-        # Store raw course data in session for later steps
+
+        # Store raw course data in session
         self.request.session["courses"] = courses
-        # Build choices for the form
-        choices = [ (str(c["id"]), f'{c["name"]} ({c["course_code"]})') for c in courses ] 
+
+        # Build choices
+        choices = [(str(c["id"]), f'{c["name"]} ({c["course_code"]})') for c in courses]
+
+        # ADD THIS
         kwargs["course_choices"] = choices
+        kwargs["courses_data"] = {str(c["id"]): c for c in courses}
+
         return kwargs
     
     def form_valid(self, form):

@@ -40,6 +40,8 @@ def get_courses_by_ids(base_url, token, course_ids):
                 "name": data.get("name"),
                 "course_code": data.get("course_code"),
                 "term": data.get("term", {}).get("name"),
+                "start_at": data.get("start_at"),
+                "end_at": data.get("end_at"),
             })
         else:
             courses.append({
@@ -47,6 +49,8 @@ def get_courses_by_ids(base_url, token, course_ids):
                 "name": f"(Error fetching course {cid})",
                 "course_code": "N/A",
                 "term": None,
+                "start_at": None,
+                "end_at": None,
                 "error": True,
             })
 

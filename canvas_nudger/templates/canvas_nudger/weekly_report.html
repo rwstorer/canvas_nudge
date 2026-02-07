@@ -1,3 +1,5 @@
+{% load dict_extras %}
+
 <h1>Weekly Assignment Status</h1>
 
 {% for course in weekly_report.courses %}
@@ -5,6 +7,10 @@
 
     <form method="post" action="{% url 'messages_preview' %}">
         {% csrf_token %}
+        <p>
+            <button type="button" onclick="toggleCourses(true)">Check All</button>
+            <button type="button" onclick="toggleCourses(false)">Uncheck All</button>
+        </p>        
 
         <table border="1" cellpadding="6">
             <tr>
@@ -33,7 +39,7 @@
                     {% if student.missing_assignments %}
                         <ul>
                         {% for a in student.missing_assignments %}
-                            <li>{{ a.name }} (due {{ a.due_at }})</li>
+                            <li>{{ a.name }} (due {{ a.due_at|pretty_date }})</li>
                         {% endfor %}
                         </ul>
                     {% else %}
@@ -48,3 +54,10 @@
     </form>
 
 {% endfor %}
+
+<script>
+function toggleCourses(state) {
+    const boxes = document.querySelectorAll('input[type=checkbox][name="selected_student_ids"]');
+    boxes.forEach(cb => cb.checked = state);
+}
+</script>

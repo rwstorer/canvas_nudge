@@ -1,6 +1,18 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trix/dist/trix.css">
 <script src="https://cdn.jsdelivr.net/npm/trix/dist/trix.js"></script>
-
+<style>
+.button-link {
+    display: inline-block;
+    padding: 8px 14px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+.button-link:hover {
+    background: #0056b3;
+}    
+</style>
 <h1>Message Templates</h1>
 
 <p>Edit the default messages used when generating student messages.</p>
@@ -17,4 +29,4 @@
     <button type="submit" name="action" value="preview">Preview Template</button>
 </form>
 
-<p><a href="{% url 'start' %}">Back to Start</a></p>
+<p><a href="{% url 'start' %}" class="button-link">Back to Start</a></p>

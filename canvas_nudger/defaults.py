@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-DEFAULTS_FILE = Path(__file__).resolve().parent / "defaults.json"
+DEFAULTS_FILE = Path(__file__).resolve().parent / ".env" / "defaults.json"
 
 def load_defaults():
     if DEFAULTS_FILE.exists():

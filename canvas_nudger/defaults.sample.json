@@ -1,4 +1,5 @@
 {
+    "NOTES": "Create a folder called .env and put the defaults.json file in that folder.",
     "canvas_api_url": "https://canvas.instructure.com/api/v1",
     "api_token": "",
     "course_ids_raw": "",
