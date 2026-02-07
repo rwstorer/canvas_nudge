@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trix/dist/trix.css">
+<script src="https://cdn.jsdelivr.net/npm/trix/dist/trix.js"></script>
+<h1>Message Preview</h1>
+
+<p>Review and edit the messages below before sending.</p>
+
+<form method="post" action="{% url 'messages_send' %}">
+    {% csrf_token %}
+
+{% for msg in messages %}
+    <h3>{{ msg.student_name }} — {{ msg.course_name }}</h3>
+
+    <!-- Hidden input that stores the HTML -->
+    <input id="message_{{ msg.course_id }}_{{ msg.student_id }}"
+           type="hidden"
+           name="message_{{ msg.course_id }}_{{ msg.student_id }}"
+           value="{{ msg.message_body|safe }}">
+
+    <!-- Trix editor bound to that input -->
+    <trix-editor input="message_{{ msg.course_id }}_{{ msg.student_id }}"></trix-editor>
+
+    <!-- Recipient mapping -->
+    <input type="hidden" name="recipient_ids"
+           value="{{ msg.course_id }}:{{ msg.student_id }}">
+
+    <hr>
+{% endfor %}
+
+    <button type="submit">Send Messages</button>
+</form>

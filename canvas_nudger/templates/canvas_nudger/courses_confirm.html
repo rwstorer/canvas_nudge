@@ -1,0 +1,9 @@
+<h1>Confirm Courses</h1>
+
+<p>These are the courses retrieved from Canvas. Select the ones you want to include.</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Continue</button>
+</form>

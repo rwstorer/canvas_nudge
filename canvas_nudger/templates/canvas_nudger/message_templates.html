@@ -1,0 +1,20 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trix/dist/trix.css">
+<script src="https://cdn.jsdelivr.net/npm/trix/dist/trix.js"></script>
+
+<h1>Message Templates</h1>
+
+<p>Edit the default messages used when generating student messages.</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <!-- Trix editors bound to the hidden inputs -->
+    <trix-editor input="template_congrats"></trix-editor>
+    <trix-editor input="template_encourage"></trix-editor>
+
+    <button type="submit" name="action" value="save">Save Templates</button>
+    <button type="submit" name="action" value="preview">Preview Template</button>
+</form>
+
+<p><a href="{% url 'start' %}">Back to Start</a></p>

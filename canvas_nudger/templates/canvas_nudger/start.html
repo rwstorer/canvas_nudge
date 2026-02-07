@@ -1,0 +1,34 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.js"></script>
+
+<h1>Canvas Nudger</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Continue</button>
+</form>
+
+<!-- Your initialization script -->
+<script>
+function initWidgets() {
+    // Flatpickr
+    flatpickr("#start_date", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+    });
+
+    flatpickr("#end_date", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+    });
+}
+
+// Initial load
+document.addEventListener("DOMContentLoaded", initWidgets);
+
+// Reinitialize after HTMX swaps
+document.body.addEventListener("htmx:afterSwap", function(evt) {
+    initWidgets();
+});
+</script>

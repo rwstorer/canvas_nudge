@@ -1,0 +1,9 @@
+{
+    "canvas_api_url": "https://canvas.instructure.com/api/v1",
+    "api_token": "",
+    "course_ids_raw": "",
+    "start_date": "2026-01-25 12:00",
+    "end_date": "2026-02-02 12:00",
+    "template_congrats": "<div>Hi, {name}!<br><br>Great job keeping up with your assignments! You do not have any past due assignments without a submission.</div><div><br></div><div><strong>Keep up the excellent work!</strong></div>",
+    "template_encourage": "<div>Hi, {name}<br><br>You have past due assignments missing a submission:<br><br>{missing_list}<br><br>Please catch up any missing assignments this week. Please let me know if you have any questions.</div>"
+}

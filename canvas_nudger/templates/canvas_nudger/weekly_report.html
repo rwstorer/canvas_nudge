@@ -1,0 +1,50 @@
+<h1>Weekly Assignment Status</h1>
+
+{% for course in weekly_report.courses %}
+    <h2>{{ course.name }}</h2>
+
+    <form method="post" action="{% url 'messages_preview' %}">
+        {% csrf_token %}
+
+        <table border="1" cellpadding="6">
+            <tr>
+                <th>Select</th>
+                <th>Student</th>
+                <th>Status</th>
+                <th>Missing Assignments</th>
+            </tr>
+
+            {% for student in course.students %}
+            <tr>
+                <td>
+                    <input type="checkbox"
+                           name="selected_student_ids"
+                           value="{{ course.id }}:{{ student.id }}">
+                </td>
+                <td>{{ student.name }}</td>
+                <td>
+                    {% if student.completed_all %}
+                        All work completed
+                    {% else %}
+                        Missing work
+                    {% endif %}
+                </td>
+                <td>
+                    {% if student.missing_assignments %}
+                        <ul>
+                        {% for a in student.missing_assignments %}
+                            <li>{{ a.name }} (due {{ a.due_at }})</li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <button type="submit">Generate Messages</button>
+    </form>
+
+{% endfor %}

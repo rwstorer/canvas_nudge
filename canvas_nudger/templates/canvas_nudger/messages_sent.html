@@ -1,0 +1,37 @@
+<h1>Messages Sent</h1>
+
+<table border="1" cellpadding="6">
+    <tr>
+        <th>Student</th>
+        <th>Course</th>
+        <th>Status</th>
+        <th>Error</th>
+        <th>Message Sent</th>
+    </tr>
+
+    {% for item in sent_report %}
+    <tr>
+        <td>{{ item.student_name }}</td>
+        <td>{{ item.course_name }}</td>
+        <td>
+            {% if item.status == "sent" %}
+                Sent successfully
+            {% else %}
+                Failed
+            {% endif %}
+        </td>
+        <td>
+            {% if item.error %}
+                {{ item.error }}
+            {% else %}
+                —
+            {% endif %}
+        </td>
+        <td>
+            <pre style="white-space: pre-wrap;">{{ item.message_body }}</pre>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<p><a href="{% url 'start' %}">Start Over</a></p>
