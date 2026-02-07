@@ -1,52 +1,146 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.js"></script>
+{% load dict_extras %}
 
-<style>
-.button-link {
-    display: inline-block;
-    padding: 8px 14px;
-    background: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-}
-.button-link:hover {
-    background: #0056b3;
-}    
-</style>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Canvas Nudger Setup</title>
 
-<h1>Canvas Nudger</h1>
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Continue</button>
-</form>
+    <style>
+        .start-container {
+            max-width: 600px;
+            margin: 2em auto;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 24px 28px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
 
-<a href="{% url 'message_templates' %}" class="button-link">
-    Edit Message Templates
-</a>
+        .start-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.8em;
+        }
 
-<!-- Your initialization script -->
+        .form-group {
+            margin-bottom: 1.2em;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #374151;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 1em;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .icon {
+            margin-right: 6px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+<div class="start-container">
+    <div class="start-title">Canvas Nudger Setup</div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label class="form-label">
+                <span class="icon">🔗</span> Canvas API URL
+            </label>
+            {{ form.canvas_api_url|add_class:"form-input" }}
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">
+                <span class="icon">🔑</span> API Token
+            </label>
+            {{ form.api_token|add_class:"form-input" }}
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">
+                <span class="icon">📘</span> Course IDs (comma‑separated)
+            </label>
+            {{ form.course_ids_raw|add_class:"form-input" }}
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">
+                <span class="icon" style="color: green">🗓️</span> Start Date
+            </label>
+            {{ form.start_date|add_class:"form-input flatpickr-date" }}
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">
+                <span class="icon" style="color: red">📅</span> End Date
+            </label>
+            {{ form.end_date|add_class:"form-input flatpickr-date" }}
+        </div>
+
+        <button type="submit" class="btn-primary">Continue</button>        
+    </form>
+    <a href="{% url 'message_templates' %}"
+    style="
+        display:block;
+        text-align:center;
+        margin-top:0.8em;
+        padding:10px 16px;
+        background:#6b7280;
+        color:white;
+        border-radius:4px;
+        text-decoration:none;
+    ">
+        ✏️ Edit Message Templates
+    </a>    
+</div>
+
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
-function initWidgets() {
-    // Flatpickr
-    flatpickr("#start_date", {
-        enableTime: true,
-        dateFormat: "Y-m-d H:i",
+    document.addEventListener("DOMContentLoaded", function () {
+        flatpickr(".flatpickr-date", {
+            dateFormat: "Y-m-d"
+        });
     });
-
-    flatpickr("#end_date", {
-        enableTime: true,
-        dateFormat: "Y-m-d H:i",
-    });
-}
-
-// Initial load
-document.addEventListener("DOMContentLoaded", initWidgets);
-
-// Reinitialize after HTMX swaps
-document.body.addEventListener("htmx:afterSwap", function(evt) {
-    initWidgets();
-});
 </script>
+</body>
+</html>

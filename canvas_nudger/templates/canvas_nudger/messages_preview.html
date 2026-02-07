@@ -1,30 +1,103 @@
+{% load dict_extras %}
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trix/dist/trix.css">
 <script src="https://cdn.jsdelivr.net/npm/trix/dist/trix.js"></script>
-<h1>Message Preview</h1>
 
-<p>Review and edit the messages below before sending.</p>
+<style>
+    .container {
+        max-width: 900px;
+        margin: 2em auto;
+        background: #ffffff;
+        padding: 10px;
+    }
 
-<form method="post" action="{% url 'messages_send' %}">
-    {% csrf_token %}
+    h1 {
+        font-size: 1.8em;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 0.4em;
+        text-align: center;
+    }
 
-{% for msg in messages %}
-    <h3>{{ msg.student_name }} — {{ msg.course_name }}</h3>
+    .subtitle {
+        text-align: center;
+        color: #4b5563;
+        margin-bottom: 1.6em;
+    }
 
-    <!-- Hidden input that stores the HTML -->
-    <input id="message_{{ msg.course_id }}_{{ msg.student_id }}"
-           type="hidden"
-           name="message_{{ msg.course_id }}_{{ msg.student_id }}"
-           value="{{ msg.message_body|safe }}">
+    .message-card {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 2em;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
 
-    <!-- Trix editor bound to that input -->
-    <trix-editor input="message_{{ msg.course_id }}_{{ msg.student_id }}"></trix-editor>
+    .message-title {
+        font-size: 1.2em;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.8em;
+    }
 
-    <!-- Recipient mapping -->
-    <input type="hidden" name="recipient_ids"
-           value="{{ msg.course_id }}:{{ msg.student_id }}">
+    trix-editor {
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        min-height: 160px;
+        padding: 10px;
+        background: #ffffff;
+    }
 
-    <hr>
-{% endfor %}
+    trix-editor:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
+    }
 
-    <button type="submit">Send Messages</button>
-</form>
+    .btn-primary {
+        background: #2563eb;
+        color: white;
+        border: none;
+        padding: 12px 18px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1em;
+        width: 100%;
+        margin-top: 1.2em;
+    }
+
+    .btn-primary:hover {
+        background: #1d4ed8;
+    }
+</style>
+
+<div class="container">
+    <h1>Message Preview</h1>
+    <p class="subtitle">Review and edit the messages below before sending.</p>
+
+    <form method="post" action="{% url 'messages_send' %}">
+        {% csrf_token %}
+
+        {% for msg in messages %}
+            <div class="message-card">
+                <div class="message-title">
+                    ✉️ {{ msg.student_name }} — {{ msg.course_name }}
+                </div>
+
+                <!-- Hidden input with safely escaped HTML -->
+                <input id="message_{{ msg.course_id }}_{{ msg.student_id }}"
+                    type="hidden"
+                    name="message_{{ msg.course_id }}_{{ msg.student_id }}"
+                    value="{{ msg.message_body|escape|safe }}">
+
+                <!-- Trix editor -->
+                <trix-editor input="message_{{ msg.course_id }}_{{ msg.student_id }}"></trix-editor>
+
+                <input type="hidden" name="recipient_ids"
+                    value="{{ msg.course_id }}:{{ msg.student_id }}">
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn-primary">Send Messages</button>
+    </form>
+</div>

@@ -1,59 +1,177 @@
 {% load dict_extras %}
 
-<h1>Weekly Assignment Status</h1>
+<style>
+    .container {
+        max-width: 900px;
+        margin: 2em auto;
+        background: #ffffff;
+        padding: 10px;
+    }
 
-{% for course in weekly_report.courses %}
-    <h2>{{ course.name }}</h2>
+    h1 {
+        font-size: 1.8em;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 1em;
+        text-align: center;
+    }
 
-    <form method="post" action="{% url 'messages_preview' %}">
-        {% csrf_token %}
-        <p>
-            <button type="button" onclick="toggleCourses(true)">Check All</button>
-            <button type="button" onclick="toggleCourses(false)">Uncheck All</button>
-        </p>        
+    .course-card {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 2em;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
 
-        <table border="1" cellpadding="6">
-            <tr>
-                <th>Select</th>
-                <th>Student</th>
-                <th>Status</th>
-                <th>Missing Assignments</th>
-            </tr>
+    .course-title {
+        font-size: 1.4em;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 1em;
+    }
 
-            {% for student in course.students %}
-            <tr>
-                <td>
-                    <input type="checkbox"
-                           name="selected_student_ids"
-                           value="{{ course.id }}:{{ student.id }}">
-                </td>
-                <td>{{ student.name }}</td>
-                <td>
-                    {% if student.completed_all %}
-                        All work completed
-                    {% else %}
-                        Missing work
-                    {% endif %}
-                </td>
-                <td>
-                    {% if student.missing_assignments %}
-                        <ul>
-                        {% for a in student.missing_assignments %}
-                            <li>{{ a.name }} (due {{ a.due_at|pretty_date }})</li>
-                        {% endfor %}
-                        </ul>
-                    {% else %}
-                        —
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
+    .btn {
+        padding: 8px 14px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9em;
+        margin-right: 6px;
+    }
 
-        <button type="submit">Generate Messages</button>
-    </form>
+    .btn-primary {
+        background: #2563eb;
+        color: white;
+    }
 
-{% endfor %}
+    .btn-primary:hover {
+        background: #1d4ed8;
+    }
+
+    .btn-secondary {
+        background: #6b7280;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background: #4b5563;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1em;
+        font-size: 0.95em;
+    }
+
+    th {
+        background: #e5e7eb;
+        padding: 10px;
+        text-align: left;
+        font-weight: 600;
+        color: #374151;
+    }
+
+    td {
+        padding: 10px;
+        border-bottom: 1px solid #e5e7eb;
+        vertical-align: top;
+    }
+
+    tr:nth-child(even) td {
+        background: #f3f4f6;
+    }
+
+    .status-good {
+        color: #059669;
+        font-weight: 600;
+    }
+
+    .status-bad {
+        color: #dc2626;
+        font-weight: 600;
+    }
+
+    .missing-list {
+        margin: 0;
+        padding-left: 18px;
+    }
+</style>
+
+<div class="container">
+    <h1>📊 Weekly Assignment Status</h1>
+
+    {% for course in weekly_report.courses %}
+        <div class="course-card">
+            <div class="course-title">📘 {{ course.name }}</div>
+
+            <form method="post" action="{% url 'messages_preview' %}">
+                {% csrf_token %}
+
+                <button type="button" class="btn btn-secondary" onclick="toggleCourses(true)">
+                    ✔️ Check All
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="toggleCourses(false)">
+                    ❌ Uncheck All
+                </button>
+
+                <table>
+                    <tr>
+                        <th>Select</th>
+                        <th>Student</th>
+                        <th>Status</th>
+                        <th>Missing Assignments</th>
+                    </tr>
+
+                    {% for student in course.students %}
+                    <tr>
+                        <td>
+                            <input type="checkbox"
+                                   name="selected_student_ids"
+                                   value="{{ course.id }}:{{ student.id }}">
+                        </td>
+
+                        <td>{{ student.name }}</td>
+
+                        <td>
+                            {% if student.completed_all %}
+                                <span class="status-good">All work completed</span>
+                            {% else %}
+                                <span class="status-bad">Missing work</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if student.missing_assignments %}
+                                <ul class="missing-list">
+                                {% for a in student.missing_assignments %}
+                                    <li>
+                                        <a href="{{ weekly_report.canvas_base_url }}/courses/{{ course.id }}/assignments/{{ a.id }}"
+                                        target="_blank"
+                                        style="color:#2563eb; text-decoration:none;">
+                                            {{ a.name }}
+                                        </a>
+                                        (due {{ a.due_at|pretty_date }})
+                                    </li>
+                                {% endfor %}
+                                </ul>
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <button type="submit" class="btn btn-primary" style="margin-top:1em;">
+                    ✉️ Generate Messages
+                </button>
+            </form>
+        </div>
+    {% endfor %}
+</div>
 
 <script>
 function toggleCourses(state) {

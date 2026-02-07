@@ -1,3 +1,4 @@
+from typing import Dict, Any
 from datetime import datetime
 from django.shortcuts import render
 from django.views.generic import FormView, TemplateView
@@ -123,12 +124,14 @@ class WeeklyReportView(TemplateView):
             submissions_map[cid] = submissions
 
         # Build the weekly report structure
-        weekly_report = build_weekly_status(
+        weekly_report: Dict[str, Any] = build_weekly_status(
             selected_courses,
             students_map,
             assignments_map,
             submissions_map,
         )
+        
+        weekly_report["canvas_base_url"] = str(request.session.get("canvas_api_url")).split('/api')[0] or None
 
         # Store for next step
         request.session["weekly_report"] = weekly_report

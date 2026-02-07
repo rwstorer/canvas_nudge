@@ -74,11 +74,13 @@ def generate_message(student_status):
 
     # Build missing list
     missing_lines = []
+    missing_lines.append("<ul>")
     for a in student_status["missing_assignments"]:
         due = a.get("due_at", "unknown due date")
-        missing_lines.append(f"- {a['name']} (due {due})")
+        missing_lines.append(f"<li>{a['name']} (due {due})</li>")
 
-    missing_list = "\n".join(missing_lines)
+    missing_lines.append("</ul>")
+    missing_list = " ".join(missing_lines)
 
     body = templates["encourage"].format(
         name=name,

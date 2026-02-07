@@ -20,3 +20,12 @@ def pretty_date(value):
         return dt.strftime("%b %d, %Y")
     except Exception:
         return value  # fallback
+    
+@register.filter(name="add_class")
+def add_class(field, css_class):
+    """
+    Safely add a CSS class to a Django form field widget.
+    """
+    existing = field.field.widget.attrs.get("class", "")
+    classes = f"{existing} {css_class}".strip()
+    return field.as_widget(attrs={"class": classes})
