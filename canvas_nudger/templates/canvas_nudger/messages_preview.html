@@ -1,8 +1,5 @@
 {% load dict_extras %}
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trix/dist/trix.css">
-<script src="https://cdn.jsdelivr.net/npm/trix/dist/trix.js"></script>
-
 <style>
     .container {
         max-width: 900px;
@@ -41,15 +38,20 @@
         margin-bottom: 0.8em;
     }
 
-    trix-editor {
-        border: 1px solid #d1d5db;
-        border-radius: 6px;
+    textarea {
+        width: 100%;
         min-height: 160px;
         padding: 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
         background: #ffffff;
+        font-size: 0.95em;
+        font-family: system-ui, sans-serif;
+        line-height: 1.4;
+        resize: vertical;
     }
 
-    trix-editor:focus {
+    textarea:focus {
         outline: none;
         border-color: #2563eb;
         box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
@@ -85,19 +87,18 @@
                     ✉️ {{ msg.student_name }} — {{ msg.course_name }}
                 </div>
 
-                <!-- Hidden input with safely escaped HTML -->
-                <input id="message_{{ msg.course_id }}_{{ msg.student_id }}"
-                    type="hidden"
+                <!-- Editable textarea with plain text -->
+                <textarea
                     name="message_{{ msg.course_id }}_{{ msg.student_id }}"
-                    value="{{ msg.message_body|escape|safe }}">
+                    id="message_{{ msg.course_id }}_{{ msg.student_id }}"
+                >{{ msg.message_body }}</textarea>
 
-                <!-- Trix editor -->
-                <trix-editor input="message_{{ msg.course_id }}_{{ msg.student_id }}"></trix-editor>
-
+                <!-- Recipient mapping -->
                 <input type="hidden" name="recipient_ids"
-                    value="{{ msg.course_id }}:{{ msg.student_id }}">
+                       value="{{ msg.course_id }}:{{ msg.student_id }}">
             </div>
         {% endfor %}
+
         <button type="submit" class="btn-primary">Send Messages</button>
     </form>
 </div>

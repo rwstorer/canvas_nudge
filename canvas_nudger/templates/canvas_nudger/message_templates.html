@@ -1,8 +1,5 @@
 {% load dict_extras %}
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trix/dist/trix.css">
-<script src="https://cdn.jsdelivr.net/npm/trix/dist/trix.js"></script>
-
 <style>
     .container {
         max-width: 750px;
@@ -37,15 +34,20 @@
         color: #374151;
     }
 
-    trix-editor {
-        border: 1px solid #d1d5db;
-        border-radius: 6px;
+    textarea {
+        width: 100%;
         min-height: 160px;
         padding: 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
         background: #f9fafb;
+        font-size: 0.95em;
+        font-family: system-ui, sans-serif;
+        line-height: 1.4;
+        resize: vertical;
     }
 
-    trix-editor:focus {
+    textarea:focus {
         outline: none;
         border-color: #2563eb;
         box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
@@ -104,12 +106,12 @@
 
         <div class="template-section">
             <label class="template-label">🎉 Congratulations Message</label>
-            <trix-editor input="template_congrats"></trix-editor>
+            <textarea name="template_congrats" id="template_congrats">{{ form.initial.template_congrats }}</textarea>
         </div>
 
         <div class="template-section">
             <label class="template-label">💪 Encouragement Message</label>
-            <trix-editor input="template_encourage"></trix-editor>
+            <textarea name="template_encourage" id="template_encourage">{{ form.initial.template_encourage }}</textarea>
         </div>
 
         <button type="submit" name="action" value="save" class="btn btn-primary">
