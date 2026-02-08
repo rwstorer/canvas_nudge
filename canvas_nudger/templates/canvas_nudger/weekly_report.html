@@ -116,6 +116,12 @@
                 <button type="button" class="btn btn-secondary" onclick="toggleCourses(false)">
                     ❌ Uncheck All
                 </button>
+                <button type="button" class="btn btn-secondary" onclick="toggleMissing(true)">
+                    ✔️ Check Missing Only
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="toggleMissing(false)">
+                    ❌ Uncheck Missing Only
+                </button>
 
                 <table>
                     <tr>
@@ -126,7 +132,7 @@
                     </tr>
 
                     {% for student in course.students %}
-                    <tr>
+                    <tr class="{% if student.completed_all %}status-completed-row{% else %}status-missing-row{% endif %}">
                         <td>
                             <input type="checkbox"
                                    name="selected_student_ids"
@@ -178,4 +184,11 @@ function toggleCourses(state) {
     const boxes = document.querySelectorAll('input[type=checkbox][name="selected_student_ids"]');
     boxes.forEach(cb => cb.checked = state);
 }
-</script>
+
+function toggleMissing(state) {
+    const rows = document.querySelectorAll('tr.status-missing-row');
+    rows.forEach(row => {
+        const cb = row.querySelector('input[type=checkbox][name="selected_student_ids"]');
+        if (cb) cb.checked = state;
+    });
+}</script>
