@@ -61,6 +61,7 @@ Prerequisites: Python 3.10+ (a virtualenv is recommended).
 
 ## Tree
 
+```ascii
 |   .gitignore
 |   db.sqlite3
 |   LICENSE
@@ -110,3 +111,4 @@ Prerequisites: Python 3.10+ (a virtualenv is recommended).
         urls.py
         wsgi.py
         __init__.py
+```
