@@ -34,7 +34,7 @@ Prerequisites: Python 3.10+ (a virtualenv is recommended).
     - `python manage.py migrate`
     - `python manage.py runserver`
 
-4. Web UI flow (open http://localhost:8000/):
+4. Web UI flow (open `http://localhost:8000/`):
     - Start: provide Canvas API URL and API token, and optionally a comma-separated list of course IDs and date range.
     - Confirm courses: verify which courses to include.
     - Weekly report: the app fetches students, filters assignments by the date range, and builds a per-student status report.
