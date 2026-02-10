@@ -94,9 +94,21 @@
         font-weight: 600;
     }
 
+    .status-expired {
+        color: #9ca3af;
+        font-weight: 600;
+    }
+
     .missing-list {
         margin: 0;
         padding-left: 18px;
+    }
+
+    .expired-list {
+        margin: 0.5em 0 0 0;
+        padding-left: 18px;
+        color: #9ca3af;
+        font-style: italic;
     }
 </style>
 
@@ -165,6 +177,20 @@
                                 </ul>
                             {% else %}
                                 —
+                            {% endif %}
+                            
+                            {% if student.expired_assignments %}
+                                <div class="expired-list">
+                                    <strong>Expired:</strong>
+                                    <ul style="margin: 0.3em 0 0 0;">
+                                    {% for a in student.expired_assignments %}
+                                        <li>
+                                            {{ a.name }}
+                                            (locked {{ a.lock_at|pretty_date }})
+                                        </li>
+                                    {% endfor %}
+                                    </ul>
+                                </div>
                             {% endif %}
                         </td>
                     </tr>
